@@ -1,0 +1,7 @@
+export default [
+  '192.168.1.50',
+  '127.0.0.1',
+  'localhost',
+  'raspberrypi.local',
+  'pi.hole',
+];
