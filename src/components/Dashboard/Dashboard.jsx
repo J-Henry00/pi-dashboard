@@ -4,12 +4,38 @@ import ServersPanel from '../Panels/ServersPanel';
 import ConnectPanel from '../Panels/ConnectPanel';
 
 import getStats from '../../utils/getStats';
+import getPublicServers from '../../utils/getPublicServers';
 
 const Dashboard = () => {
   const [piStats, setPiStats] = useState(null);
   const [servers, setServers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  async function fetchData() {
+    try {
+
+      await fetchStats();
+      const serversData = await getPublicServers();
+      setServers(serversData);
+    } catch (err) {
+      setError(err.message);
+      console.error(err);
+      
+    } finally {
+      setLoading(false);
+    }
+
+    // Using mock data for now
+    // setPiStats(statsData);
+    // setServers(mockServers);
+    setLoading(false);
+  }
+
+  async function fetchStats() {
+      const statsData = await getStats();
+      setPiStats(statsData);
+  }
 
   // Example placeholder data
   const mockPiStats = {
@@ -30,30 +56,45 @@ const Dashboard = () => {
   ];
 
   // In a real application, you would use useEffect to fetch data
-  useEffect(async() => {
-    try {
-      const statsData = await getStats();
-      setPiStats(statsData);
-      // const serversData = await fetchServersData();
-      // setServers(serversData);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+  useEffect(() => {
+    fetchData();
 
-    // Using mock data for now
-    // setPiStats(statsData);
-    setServers(mockServers);
-    setLoading(false);
+    const intervalId = setInterval(fetchStats, 1000);
+    return () => clearInterval(intervalId);
   }, []);
 
   if (loading) return <div className="text-white">Loading...</div>;
   if (error) return <div className="text-red-500">Error: {error}</div>;
 
   const handleConnect = (action) => {
-    console.log(`Action: ${action}`);
-    // Implement your connection logic here
+    var actions = {
+      'web-ssh': {
+        action: 'new_page',
+        target: 'https://ssh-pi.hjindra.org/'
+      },
+      ssh: {
+        action: 'display-modal',
+        target: 'pi@hjindra.org'
+      },
+      vnc: {
+        action: 'display-modal',
+        target: 'vnc.hjindra.org'
+      },
+      'pi-connect': {
+        action: 'new_page',
+        target: 'https://connect.raspberrypi.com/devices'
+      },
+      'vscode-web': {
+        action: 'new_page',
+        target: 'https://code.hjindra.org/'
+      },
+      'cloud-storage': {
+        action: 'new_page',
+        target: 'https://disk.hjindra.org/'
+      }
+    }
+
+    return actions[action] || null; // make the function
   };
 
   return (

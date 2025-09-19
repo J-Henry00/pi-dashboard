@@ -8,9 +8,10 @@ async function getStats() {
     },
   };
 
-  var sysInfo = (await axios.get('http://127.0.0.1:9001/sysinfo', config)).data;
+  var sysInfo = (await axios.get('http://192.168.1.50:9001/sysinfo', config))
+    .data;
   var resourcesInfo = (
-    await axios.get('http://127.0.0.1:9001/resources', config)
+    await axios.get('http://192.168.1.50:9001/resources', config)
   ).data;
 
   if (!sysInfo.success || !resourcesInfo.success) {
@@ -23,6 +24,7 @@ async function getStats() {
   basicStats.tempC = sysInfo.data.tempCelsius;
   basicStats.tempF = sysInfo.data.tempFarenheit;
 
+  basicStats.cpu = [];
   basicStats.cpu[0] = resourcesInfo.data.cpu.utilizationPercent[0];
   basicStats.cpu[1] = resourcesInfo.data.cpu.utilizationPercent[1];
   basicStats.cpu[2] = resourcesInfo.data.cpu.utilizationPercent[2];

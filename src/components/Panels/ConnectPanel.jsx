@@ -5,20 +5,24 @@ import Button from '../UI/Button';
 
 const ConnectPanel = ({ onConnect }) => {
   const buttons = [
-    'Connect to web terminal',
-    'Connect using SSH',
-    'Connect using VNC',
-    'Connect using PI Connect',
-    'Connect using VS Code Web server',
-    'Connect to cloud storage'
+    { text: 'Connect to web terminal', type: 'web-ssh' },
+    { text: 'Connect using SSH', type: 'ssh' },
+    { text: 'Connect using VNC', type: 'vnc' },
+    { text: 'Connect using PI Connect', type: 'pi-connect' },
+    { text: 'Connect using VS Code Web server', type: 'vscode-web' },
+    { text: 'Connect to cloud storage', type: 'cloud-storage' }
   ];
 
   return (
     <Card>
       <PanelTitle title="Connect" />
       <div className="flex flex-col space-y-2">
-        {buttons.map((text, index) => (
-          <Button key={index} text={text} onClick={() => onConnect(text)} />
+        {buttons.map((btn, index) => (
+          <Button
+            key={index}
+            text={btn.text}
+            onClick={() => onConnect(btn.type)}
+          />
         ))}
       </div>
     </Card>
