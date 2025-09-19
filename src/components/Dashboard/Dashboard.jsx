@@ -37,7 +37,15 @@ const CustomModal = ({ isOpen, onClose, text, protocol }) => {
         onClick={(e) => e.stopPropagation()} // Prevent modal content clicks from closing modal
       >
         <div className="text-white text-center mb-6">
-          <p className="text-lg">{(protocol.toUpperCase() != 'NOTACONNECT' && "Download software for connecting to "+protocol.toUpperCase()+" server and use address" (<br />))}<strong>{text}</strong></p>
+        <p className="text-lg">
+          {protocol.toUpperCase() !== 'NOTACONNECT' && (
+            <>
+              Download software for connecting to {protocol.toUpperCase()} server and use address
+              <br />
+            </>
+          )}
+          <strong>{text}</strong>
+        </p>
         </div>
         <div className="flex justify-center">
           <button

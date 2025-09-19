@@ -57,7 +57,7 @@ const ServersPanel = ({ servers, loading, isDarkMode = true }) => {
         className={`space-y-2 overflow-y-auto custom-scrollbar ${
           isDarkMode ? 'text-gray-300' : 'text-gray-700'
         }`}
-        style={{ maxHeight: '20vh' }}
+        style={{ maxHeight: '40vh' }}
       >
         {loading ? (
           <div className="text-center py-8">
