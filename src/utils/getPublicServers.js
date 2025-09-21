@@ -8,7 +8,7 @@ async function getPublicServers() {
   };
 
   var activeServers = (
-    await axios.get('http://192.168.1.50:9001/services', config)
+    await axios.get('https://pi-system.hjindra.org/services', config)
   ).data;
 
   if (!activeServers.success) return null;

@@ -8,10 +8,11 @@ async function getStats() {
     },
   };
 
-  var sysInfo = (await axios.get('http://192.168.1.50:9001/sysinfo', config))
-    .data;
+  var sysInfo = (
+    await axios.get('https://pi-system.hjindra.org/sysinfo', config)
+  ).data;
   var resourcesInfo = (
-    await axios.get('http://192.168.1.50:9001/resources', config)
+    await axios.get('https://pi-system.hjindra.org/resources', config)
   ).data;
 
   if (!sysInfo.success || !resourcesInfo.success) {
