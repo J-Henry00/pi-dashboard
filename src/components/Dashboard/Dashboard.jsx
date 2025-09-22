@@ -326,7 +326,7 @@ const Dashboard = () => {
       <h1 className="text-4xl font-bold text-center mb-8">Raspberry PI</h1>
       <div className="space-y-8 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <PiStatsPanel stats={piStats} loading={loading.piStats} isDarkMode={isDarkMode} />
+          <PiStatsPanel stats={piStats} loading={loading.piStats} isDarkMode={isDarkMode} isLoggedIn={isLoggedIn} />
           <ServersPanel servers={servers} loading={loading.servers} isDarkMode={isDarkMode} />
           <ConnectPanel onConnect={handleAction} isDarkMode={isDarkMode} />
         </div>

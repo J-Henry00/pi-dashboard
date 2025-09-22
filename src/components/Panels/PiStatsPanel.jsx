@@ -4,7 +4,7 @@ import PanelTitle from '../UI/PanelTitle';
 import { cpuTemp, cpuUsage, ramUsage } from '../../utils/getStatColor';
 import getPublicIP from '../../utils/getPublicIp';
 
-const PiStatsPanel = ({ stats, loading, isDarkMode = true }) => {
+const PiStatsPanel = ({ stats, loading, isLoggedIn, isDarkMode = true }) => {
   return (
     <Card isDarkMode={isDarkMode}>
       <PanelTitle title="PI stats" isDarkMode={isDarkMode} />
@@ -19,6 +19,7 @@ const PiStatsPanel = ({ stats, loading, isDarkMode = true }) => {
           <>
             <p><strong>hostname:</strong> {stats.hostname}</p>
             <p><strong>architecture:</strong> {stats.arch}</p>
+            {isLoggedIn &&
             <p>
               <strong>IP Address:</strong>{' '}
               <span
@@ -44,7 +45,7 @@ const PiStatsPanel = ({ stats, loading, isDarkMode = true }) => {
               >
                 Click to reveal
               </span>
-            </p>
+            </p> }
             <p><strong>CPU Temp:</strong> <span className={cpuTemp(stats.tempC, isDarkMode)}>{isDarkMode ? <>{stats.tempC} °C</> : <strong>{stats.tempC} °C</strong> }</span> / <span className={cpuTemp(stats.tempC, isDarkMode)}>{isDarkMode ? <>{stats.tempF.toFixed(1)} °F</> : <strong>{stats.tempF.toFixed(1)} °F</strong>}</span></p>
             <hr className={`my-4 ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`} />
             <p><strong>CPU0:</strong> <span className={cpuUsage(stats.cpu[0], isDarkMode)}>{isDarkMode ? <>{stats.cpu[0]}%</> : <strong>{stats.cpu[0]}%</strong>}</span></p>
