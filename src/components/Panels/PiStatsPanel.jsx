@@ -1,6 +1,8 @@
 import React from 'react';
 import Card from '../UI/Card';
 import PanelTitle from '../UI/PanelTitle';
+import { cpuTemp, cpuUsage, ramUsage } from '../../utils/getStatColor';
+import getPublicIP from '../../utils/getPublicIp';
 
 const PiStatsPanel = ({ stats, loading, isDarkMode = true }) => {
   return (
@@ -17,13 +19,39 @@ const PiStatsPanel = ({ stats, loading, isDarkMode = true }) => {
           <>
             <p><strong>hostname:</strong> {stats.hostname}</p>
             <p><strong>architecture:</strong> {stats.arch}</p>
-            <p><strong>CPU Temp:</strong> {stats.tempC} °C / {stats.tempF.toFixed(1)} °F</p>
+            <p>
+              <strong>IP Address:</strong>{' '}
+              <span
+                className="text-blue-400 cursor-pointer"
+                onClick={async function handleClick(e) {
+                  if (e.target.dataset.loading || e.target.dataset.revealed) return;
+                  e.target.dataset.loading = "true";
+                  e.target.textContent = "Loading...";
+                  try {
+                    const ip = await getPublicIP();
+                    e.target.textContent = ip;
+                    e.target.classList.remove("text-blue-400");
+                    e.target.classList.remove("text-red-500");
+                    e.target.style.cursor = "text";
+                    e.target.dataset.revealed = "true";
+                  } catch (err) {
+                    e.target.textContent = "Error";
+                    e.target.classList.remove("text-blue-400");
+                    e.target.classList.add("text-red-500");
+                  }
+                  delete e.target.dataset.loading;
+                }}
+              >
+                Click to reveal
+              </span>
+            </p>
+            <p><strong>CPU Temp:</strong> <span className={cpuTemp(stats.tempC, isDarkMode)}>{isDarkMode ? <>{stats.tempC} °C</> : <strong>{stats.tempC} °C</strong> }</span> / <span className={cpuTemp(stats.tempC, isDarkMode)}>{isDarkMode ? <>{stats.tempF.toFixed(1)} °F</> : <strong>{stats.tempF.toFixed(1)} °F</strong>}</span></p>
             <hr className={`my-4 ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`} />
-            <p><strong>CPU0:</strong> {stats.cpu[0]}%</p>
-            <p><strong>CPU1:</strong> {stats.cpu[1]}%</p>
-            <p><strong>CPU2:</strong> {stats.cpu[2]}%</p>
-            <p><strong>CPU3:</strong> {stats.cpu[3]}%</p>
-            <p><strong>RAM:</strong> {stats.ram} </p>
+            <p><strong>CPU0:</strong> <span className={cpuUsage(stats.cpu[0], isDarkMode)}>{isDarkMode ? <>{stats.cpu[0]}%</> : <strong>{stats.cpu[0]}%</strong>}</span></p>
+            <p><strong>CPU1:</strong> <span className={cpuUsage(stats.cpu[1], isDarkMode)}>{isDarkMode ? <>{stats.cpu[1]}%</> : <strong>{stats.cpu[1]}%</strong>}</span></p>
+            <p><strong>CPU2:</strong> <span className={cpuUsage(stats.cpu[2], isDarkMode)}>{isDarkMode ? <>{stats.cpu[2]}%</> : <strong>{stats.cpu[2]}%</strong>}</span></p>
+            <p><strong>CPU3:</strong> <span className={cpuUsage(stats.cpu[3], isDarkMode)}>{isDarkMode ? <>{stats.cpu[3]}%</> : <strong>{stats.cpu[3]}%</strong>}</span></p>
+            <p><strong>RAM:</strong> <span className={`text-${ramUsage(stats.ramUsagePercent, isDarkMode)}`}>{isDarkMode ? <>{stats.ram}</> : <strong>{stats.ram}</strong>}</span> </p>
             <p><strong>Uptime:</strong> {stats.uptime}</p>
           </>
         ) : (

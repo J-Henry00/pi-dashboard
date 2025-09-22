@@ -31,6 +31,7 @@ async function getStats() {
   basicStats.cpu[2] = resourcesInfo.data.cpu.utilizationPercent[2];
   basicStats.cpu[3] = resourcesInfo.data.cpu.utilizationPercent[3];
   basicStats.ram = resourcesInfo.data.ram.full.formattedMB;
+  basicStats.ramUsagePercent = resourcesInfo.data.ram.full.percentage;
 
   return basicStats;
 }
