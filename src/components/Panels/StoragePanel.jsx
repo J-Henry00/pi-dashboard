@@ -1,6 +1,7 @@
 import React from 'react';
 import Card from '../UI/Card';
 import PanelTitle from '../UI/PanelTitle';
+import { diskUsage } from '../../utils/getStatColor';
 
 const StoragePanel = ({ storage, loading, isLoggedIn, isDarkMode = true }) => {
   return (
@@ -29,7 +30,7 @@ const StoragePanel = ({ storage, loading, isLoggedIn, isDarkMode = true }) => {
                         <div className="mb-2">
                           <p><strong>File System: </strong> {s.filesystem}</p>
                           <p><strong>Mounted on: </strong> {s.mount}</p>
-                          <p><strong>Capacity: </strong> {s.fullGB} / {s.totalGB} GB ({s.fullPercent} %)</p>
+                          <p><strong>Capacity: </strong> <span className={diskUsage(s.fullPercent, isDarkMode)}>{isDarkMode ? <>{s.fullGB} / {s.totalGB} GB ({s.fullPercent} %)</> : <strong>{s.fullGB} / {s.totalGB} GB ({s.fullPercent} %)</strong>}</span></p>
                         </div>
                         {idx + 1 !== storage.advanced.length && <hr className={`my-4 ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`} />}
                       </React.Fragment>
@@ -46,7 +47,7 @@ const StoragePanel = ({ storage, loading, isLoggedIn, isDarkMode = true }) => {
                         <div className="mb-2">
                           <p><strong>File System: </strong> {s.filesystem}</p>
                           <p><strong>Mounted on: </strong> {s.mount}</p>
-                          <p><strong>Capacity: </strong> {s.fullGB} / {s.totalGB} GB ({s.fullPercent} %)</p>
+                          <p><strong>Capacity: </strong> <span className={diskUsage(s.fullPercent, isDarkMode)}>{isDarkMode ? <>{s.fullGB} / {s.totalGB} GB ({s.fullPercent} %)</> : <strong>{s.fullGB} / {s.totalGB} GB ({s.fullPercent} %)</strong>}</span></p>
                         </div>
                         {idx + 1 !== storage.basic.length && <hr className={`my-4 ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`} />}
                       </React.Fragment>
