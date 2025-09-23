@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import PiStatsPanel from '../Panels/PiStatsPanel';
 import ServersPanel from '../Panels/ServersPanel';
 import ConnectPanel from '../Panels/ConnectPanel';
+import StoragePanel from '../Panels/StoragePanel';
 import VirtualNodesPanel from '../Panels/VirtualNodesPanel';
 import LoginModal from '../UI/LoginModal';
 import ConfirmModal from '../UI/ConfirmModal';
 
 import getStats from '../../utils/getStats';
 import getPublicServers from '../../utils/getPublicServers';
+import getStorage from '../../utils/getStorageUsage';
 import axios from 'axios';
 
 // Custom Modal Component
@@ -63,9 +65,11 @@ const CustomModal = ({ isOpen, onClose, text, protocol }) => {
 const Dashboard = () => {
   const [piStats, setPiStats] = useState(null);
   const [servers, setServers] = useState([]);
+  const [storageInfo, setStorageInfo] = useState({});
   const [loading, setLoading] = useState({
     piStats: true,
-    servers: true
+    servers: true,
+    storage: true
   });
   const [error, setError] = useState(null);
   const [modal, setModal] = useState({ isOpen: false, text: '', protocol: '' });
@@ -89,6 +93,12 @@ const Dashboard = () => {
       const serversData = await getPublicServers();
       setServers(serversData);
       setLoading(prev => ({ ...prev, servers: false }));
+
+      // Fetch storage
+      setLoading(prev => ({ ...prev, storage: true }));
+      const storageData = await getStorage();
+      setStorageInfo(storageData);
+      setLoading(prev => ({ ...prev, storage: false }));
     } catch (err) {
       setError(err.message);
       console.error(err);
@@ -324,9 +334,10 @@ const Dashboard = () => {
         : 'bg-gray-100 text-gray-900'
     }`}>
       <h1 className="text-4xl font-bold text-center mb-8">Raspberry PI</h1>
-      <div className="space-y-8 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="space-y-8 max-w-[95rem] mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <PiStatsPanel stats={piStats} loading={loading.piStats} isDarkMode={isDarkMode} isLoggedIn={isLoggedIn} />
+          <StoragePanel storage={storageInfo} loading={loading.storage} isDarkMode={isDarkMode} isLoggedIn={isLoggedIn} />
           <ServersPanel servers={servers} loading={loading.servers} isDarkMode={isDarkMode} />
           <ConnectPanel onConnect={handleAction} isDarkMode={isDarkMode} />
         </div>
