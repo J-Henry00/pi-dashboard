@@ -57,17 +57,19 @@ const ServersPanel = ({ servers, loading, isDarkMode = true }) => {
         className={`space-y-2 overflow-y-auto custom-scrollbar ${
           isDarkMode ? 'text-gray-300' : 'text-gray-700'
         }`}
-        style={{ maxHeight: '40vh' }}
+        style={{ maxHeight: '35vh' }}
       >
         {loading ? (
           <div className="text-center py-8">
             <div className={isDarkMode ? 'text-white' : 'text-gray-900'}>Loading...</div>
           </div>
         ) : filteredServers.length > 0 ? (
-          filteredServers.map((server, index) => (
+          filteredServers.map((server, index) => (<>
             <div key={index} className='mb-[1vh]'>
               <strong>{server.protocol}</strong> on port <strong>{server.port}</strong>: <a target='_blank' href={server.protocol.toLowerCase() + "://" + server.hostname} className="text-blue-400 hover:underline">{server.hostname}</a> { localAddresses.includes(window.location.hostname) && (<span>(<strong><a href={server.local.replace('localhost', window.location.hostname)} target="_blank" className='hover:underline'>{server.local.replace('localhost', window.location.hostname)}</a></strong>)</span>) }
             </div>
+            {index + 1 !== filteredServers.length && <hr className={`my-4 ${isDarkMode ? 'border-gray-600' : 'border-gray-300'} w-[3rem]`} />}
+            </>
           ))
         ) : (
           <div className="text-gray-500 italic">

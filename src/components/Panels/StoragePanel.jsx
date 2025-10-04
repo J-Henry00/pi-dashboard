@@ -22,7 +22,7 @@ const StoragePanel = ({ storage, loading, isLoggedIn, isDarkMode = true }) => {
               }`}
               style={{ maxHeight: '40vh' }}
             >
-              {isLoggedIn ?  
+              {!isLoggedIn ?  
                 <>
                   {storage.advanced && storage.advanced.length > 0 ? (
                     storage.advanced.map((s, idx) => (
@@ -32,7 +32,7 @@ const StoragePanel = ({ storage, loading, isLoggedIn, isDarkMode = true }) => {
                           <p><strong>Mounted on: </strong> {s.mount}</p>
                           <p><strong>Capacity: </strong> <span className={diskUsage(s.fullPercent, isDarkMode)}>{isDarkMode ? <>{s.fullGB} / {s.totalGB} GB ({s.fullPercent} %)</> : <strong>{s.fullGB} / {s.totalGB} GB ({s.fullPercent} %)</strong>}</span></p>
                         </div>
-                        {idx + 1 !== storage.advanced.length && <hr className={`my-4 ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`} />}
+                        {idx + 1 !== storage.advanced.length && <hr className={`my-4 ${isDarkMode ? 'border-gray-600' : 'border-gray-300'} w-[3rem]`} />}
                       </React.Fragment>
                     ))
                   ) : (

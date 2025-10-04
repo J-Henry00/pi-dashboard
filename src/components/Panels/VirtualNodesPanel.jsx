@@ -53,7 +53,7 @@ const VirtualNodesPanel = ({ servers, isDarkMode = true, isLoggedIn = false, onK
             
             {/* Horizontal rule if both port 6000 and other servers exist */}
             {port6000Servers.length > 0 && otherVirtualServers.length > 0 && (
-              <hr className={`my-4 ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`} />
+              <hr className={`my-4 ${isDarkMode ? 'border-gray-600' : 'border-gray-300'} w-[3rem]`} />
             )}
             
             {/* Other virtual servers */}

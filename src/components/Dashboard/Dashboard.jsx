@@ -4,12 +4,20 @@ import ServersPanel from '../Panels/ServersPanel';
 import ConnectPanel from '../Panels/ConnectPanel';
 import StoragePanel from '../Panels/StoragePanel';
 import VirtualNodesPanel from '../Panels/VirtualNodesPanel';
+import PM2Panel from '../Panels/PM2Panel';
+import PiLogsPanel from '../Panels/PiLogsPanel';
+import DockerPanel from '../Panels/DockerPanel';
+import NetworkGraphsPanel from '../Panels/NetworkGraphsPanel';
 import LoginModal from '../UI/LoginModal';
 import ConfirmModal from '../UI/ConfirmModal';
 
 import getStats from '../../utils/getStats';
 import getPublicServers from '../../utils/getPublicServers';
 import getStorage from '../../utils/getStorageUsage';
+import getPM2Data from '../../utils/getPM2Data';
+import getPiLogs from '../../utils/getPiLogs';
+import getDockerContainers from '../../utils/getDockerContainers';
+import getNetworkGraphs from '../../utils/getNetworkGraphs';
 import axios from 'axios';
 
 // Custom Modal Component
@@ -66,10 +74,18 @@ const Dashboard = () => {
   const [piStats, setPiStats] = useState(null);
   const [servers, setServers] = useState([]);
   const [storageInfo, setStorageInfo] = useState({});
+  const [pm2Data, setPm2Data] = useState([]);
+  const [logsData, setLogsData] = useState([]);
+  const [dockerData, setDockerData] = useState([]);
+  const [networkData, setNetworkData] = useState(null);
   const [loading, setLoading] = useState({
     piStats: true,
     servers: true,
-    storage: true
+    storage: true,
+    pm2: true,
+    logs: true,
+    docker: true,
+    network: true
   });
   const [error, setError] = useState(null);
   const [modal, setModal] = useState({ isOpen: false, text: '', protocol: '' });
@@ -99,10 +115,43 @@ const Dashboard = () => {
       const storageData = await getStorage();
       setStorageInfo(storageData);
       setLoading(prev => ({ ...prev, storage: false }));
+
+      // Fetch PM2 data
+      setLoading(prev => ({ ...prev, pm2: true }));
+      const pm2DataResult = await getPM2Data();
+      setPm2Data(pm2DataResult || []);
+      setLoading(prev => ({ ...prev, pm2: false }));
+
+      // Fetch PI logs
+      setLoading(prev => ({ ...prev, logs: true }));
+      const logsDataResult = await getPiLogs();
+      setLogsData(logsDataResult || []);
+      setLoading(prev => ({ ...prev, logs: false }));
+
+      // Fetch Docker containers
+      setLoading(prev => ({ ...prev, docker: true }));
+      const dockerDataResult = await getDockerContainers();
+      setDockerData(dockerDataResult || []);
+      setLoading(prev => ({ ...prev, docker: false }));
+
+      // Fetch network graphs
+      setLoading(prev => ({ ...prev, network: true }));
+      const networkDataResult = await getNetworkGraphs();
+      setNetworkData(networkDataResult);
+      setLoading(prev => ({ ...prev, network: false }));
     } catch (err) {
       setError(err.message);
       console.error(err);
-      setLoading(prev => ({ ...prev, piStats: false, servers: false }));
+      setLoading(prev => ({ 
+        ...prev, 
+        piStats: false, 
+        servers: false, 
+        storage: false,
+        pm2: false,
+        logs: false,
+        docker: false,
+        network: false
+      }));
     }
   }
 
@@ -184,16 +233,54 @@ const Dashboard = () => {
   };
 
   const handleRefresh = async () => {
-    // Only refresh servers since PiStatsPanel refreshes automatically via interval
-    setLoading(prev => ({ ...prev, servers: true }));
+    // Refresh all data except PiStatsPanel which refreshes automatically via interval
+    setLoading(prev => ({ 
+      ...prev, 
+      servers: true, 
+      storage: true,
+      pm2: true,
+      logs: true,
+      docker: true,
+      network: true
+    }));
     try {
-      const serversData = await getPublicServers();
+      const [serversData, storageData, pm2DataResult, logsDataResult, dockerDataResult, networkDataResult] = await Promise.all([
+        getPublicServers(),
+        getStorage(),
+        getPM2Data(),
+        getPiLogs(),
+        getDockerContainers(),
+        getNetworkGraphs()
+      ]);
+      
       setServers(serversData);
-      setLoading(prev => ({ ...prev, servers: false }));
+      setStorageInfo(storageData);
+      setPm2Data(pm2DataResult || []);
+      setLogsData(logsDataResult || []);
+      setDockerData(dockerDataResult || []);
+      setNetworkData(networkDataResult);
+      
+      setLoading(prev => ({ 
+        ...prev, 
+        servers: false, 
+        storage: false,
+        pm2: false,
+        logs: false,
+        docker: false,
+        network: false
+      }));
     } catch (err) {
       setError(err.message);
       console.error(err);
-      setLoading(prev => ({ ...prev, servers: false }));
+      setLoading(prev => ({ 
+        ...prev, 
+        servers: false, 
+        storage: false,
+        pm2: false,
+        logs: false,
+        docker: false,
+        network: false
+      }));
     }
   };
 
@@ -340,6 +427,13 @@ const Dashboard = () => {
           <StoragePanel storage={storageInfo} loading={loading.storage} isDarkMode={isDarkMode} isLoggedIn={isLoggedIn} />
           <ServersPanel servers={servers} loading={loading.servers} isDarkMode={isDarkMode} />
           <ConnectPanel onConnect={handleAction} isDarkMode={isDarkMode} />
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <PM2Panel pm2Data={pm2Data} loading={loading.pm2} isDarkMode={isDarkMode} isLoggedIn={isLoggedIn} />
+          <PiLogsPanel logsData={logsData} loading={loading.logs} isDarkMode={isDarkMode} />
+          <DockerPanel dockerData={dockerData} loading={loading.docker} isDarkMode={isDarkMode} />
+          <NetworkGraphsPanel networkData={networkData} loading={loading.network} isDarkMode={isDarkMode} />
         </div>
         
         <div className="flex justify-center">
