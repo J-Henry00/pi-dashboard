@@ -3,7 +3,7 @@ import Card from '../UI/Card';
 import PanelTitle from '../UI/PanelTitle';
 import { diskUsage } from '../../utils/getStatColor';
 
-const StoragePanel = ({ storage, loading, isLoggedIn, isDarkMode = true }) => {
+const StoragePanel = ({ storage, loading, isLoggedIn = false, isDarkMode = true }) => {
   return (
     <Card isDarkMode={isDarkMode}>
       <PanelTitle title={isLoggedIn ? "Storage (expert mode)" : "Storage"} isDarkMode={isDarkMode} />
