@@ -4,7 +4,7 @@ import PanelTitle from '../UI/PanelTitle';
 
 import localAddresses from '../../utils/localAddresses';
 
-const ServersPanel = ({ servers, loading, isDarkMode = true }) => {
+const ServersPanel = ({ servers, loading, isDarkMode = true, isLoggedIn = false }) => {
   // Stav pro uložení vybraných protokolů
   const [selectedProtocols, setSelectedProtocols] = useState([]);
 
@@ -31,15 +31,16 @@ const ServersPanel = ({ servers, loading, isDarkMode = true }) => {
     const isVisibleByProtocolFilter = selectedProtocols.length === 0 || selectedProtocols.includes(server.protocol);
     
     // Server se zobrazí, pokud vyhovuje oběma filtrům
-    return isVisibleByVirtualFilter && isVisibleByProtocolFilter;
+    return !isLoggedIn ? isVisibleByVirtualFilter && isVisibleByProtocolFilter && server.protocol.toLowerCase() == 'http' : isVisibleByVirtualFilter && isVisibleByProtocolFilter;
   });
 
   return (
     <Card isDarkMode={isDarkMode}>
-      <PanelTitle title="Active public servers" isDarkMode={isDarkMode} />
+      <PanelTitle title={isLoggedIn ? "Active public servers (expert mode)" : "Active public servers"} isDarkMode={isDarkMode} />
       
       {/* UI pro filtrování protokolů */}
-      <div className="flex flex-wrap gap-2 mb-4">
+      {isLoggedIn && (
+        <div className="flex flex-wrap gap-2 mb-4">
         {uniqueProtocols.map(protocol => (
           <label key={protocol} className="flex items-center space-x-1 cursor-pointer">
             <input
@@ -52,6 +53,7 @@ const ServersPanel = ({ servers, loading, isDarkMode = true }) => {
           </label>
         ))}
       </div>
+      )}
 
       <div
         className={`space-y-2 overflow-y-auto custom-scrollbar ${
@@ -66,7 +68,7 @@ const ServersPanel = ({ servers, loading, isDarkMode = true }) => {
         ) : filteredServers.length > 0 ? (
           filteredServers.map((server, index) => (<>
             <div key={index} className='mb-[1vh]'>
-              <strong>{server.protocol}</strong> on port <strong>{server.port}</strong>: <a target='_blank' href={server.protocol.toLowerCase() + "://" + server.hostname} className="text-blue-400 hover:underline">{server.hostname}</a> { localAddresses.includes(window.location.hostname) && (<span>(<strong><a href={server.local.replace('localhost', window.location.hostname)} target="_blank" className='hover:underline'>{server.local.replace('localhost', window.location.hostname)}</a></strong>)</span>) }
+              <strong className='!select-text'>{server.protocol}</strong> on port <strong className='!select-text'>{server.port}</strong>: <a target='_blank' href={server.protocol.toLowerCase() + "://" + server.hostname} className="text-blue-400 hover:underline !select-text">{server.hostname}</a> { localAddresses.includes(window.location.hostname) && (<span>(<strong><a href={server.local.replace('localhost', window.location.hostname)} target="_blank" className='hover:underline !select-text'>{server.local.replace('localhost', window.location.hostname)}</a></strong>)</span>) }
             </div>
             {index + 1 !== filteredServers.length && <hr className={`my-4 ${isDarkMode ? 'border-gray-600' : 'border-gray-300'} w-[3rem]`} />}
             </>

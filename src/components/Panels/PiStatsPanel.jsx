@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Card from '../UI/Card';
 import PanelTitle from '../UI/PanelTitle';
 import { cpuTemp, cpuUsage, ramUsage } from '../../utils/getStatColor';
 import getPublicIP from '../../utils/getPublicIp';
 
 const PiStatsPanel = ({ stats, loading, isLoggedIn, isDarkMode = true }) => {
+
+  const [ipExposed, setIpExposed] = useState(false);
+  
   return (
     <Card isDarkMode={isDarkMode}>
       <PanelTitle title="PI stats" isDarkMode={isDarkMode} />
@@ -17,12 +20,13 @@ const PiStatsPanel = ({ stats, loading, isLoggedIn, isDarkMode = true }) => {
           </div>
         ) : stats ? (
           <>
-            <p><strong>hostname:</strong> {stats.hostname}</p>
-            <p><strong>architecture:</strong> {stats.arch}</p>
+            <p><strong>hostname:</strong> <span className='!select-text'>{stats.hostname}</span></p>
+            <p><strong>architecture:</strong> <span className='!select-text'>{stats.arch}</span></p>
             {isLoggedIn &&
             <p>
               <strong>IP Address:</strong>{' '}
               <span
+                id="ip-address"
                 className="text-blue-400 cursor-pointer"
                 onClick={async function handleClick(e) {
                   if (e.target.dataset.loading || e.target.dataset.revealed) return;
@@ -33,8 +37,10 @@ const PiStatsPanel = ({ stats, loading, isLoggedIn, isDarkMode = true }) => {
                     e.target.textContent = ip;
                     e.target.classList.remove("text-blue-400");
                     e.target.classList.remove("text-red-500");
+                    e.target.classList.add("!select-text");
                     e.target.style.cursor = "text";
                     e.target.dataset.revealed = "true";
+                    setIpExposed(true);
                   } catch (err) {
                     e.target.textContent = "Error";
                     e.target.classList.remove("text-blue-400");
@@ -45,6 +51,19 @@ const PiStatsPanel = ({ stats, loading, isLoggedIn, isDarkMode = true }) => {
               >
                 Click to reveal
               </span>
+              {ipExposed && (
+                <span className="text-blue-400 cursor-pointer" onClick={function handleClick() {
+                  const el = document.getElementById("ip-address");
+                  el.textContent = "Click to reveal";
+                  el.classList.remove("text-red-500");
+                  el.classList.remove("!select-text");
+                  el.classList.add("text-blue-400");
+                  el.style.cursor = "pointer";
+                  delete el.dataset.revealed;
+                  delete el.dataset.loading;
+                  setIpExposed(false);
+                }}> Hide</span>
+              )}
             </p> }
             <p><strong>CPU Temp:</strong> <span className={cpuTemp(stats.tempC, isDarkMode)}>{isDarkMode ? <>{stats.tempC} °C</> : <strong>{stats.tempC} °C</strong> }</span> / <span className={cpuTemp(stats.tempC, isDarkMode)}>{isDarkMode ? <>{stats.tempF.toFixed(1)} °F</> : <strong>{stats.tempF.toFixed(1)} °F</strong>}</span></p>
             <hr className={`my-4 ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`} />

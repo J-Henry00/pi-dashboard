@@ -158,6 +158,8 @@ const Dashboard = () => {
   async function fetchStats() {
     const statsData = await getStats();
     setPiStats(statsData);
+    const pm2DataResult = await getPM2Data();
+    setPm2Data(pm2DataResult || []);
   }
 
   // Example placeholder data
@@ -425,14 +427,14 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <PiStatsPanel stats={piStats} loading={loading.piStats} isDarkMode={isDarkMode} isLoggedIn={isLoggedIn} />
           <StoragePanel storage={storageInfo} loading={loading.storage} isDarkMode={isDarkMode} isLoggedIn={isLoggedIn} />
-          <ServersPanel servers={servers} loading={loading.servers} isDarkMode={isDarkMode} />
+          <ServersPanel servers={servers} loading={loading.servers} isDarkMode={isDarkMode} isLoggedIn={isLoggedIn} />
           <ConnectPanel onConnect={handleAction} isDarkMode={isDarkMode} />
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <PM2Panel pm2Data={pm2Data} loading={loading.pm2} isDarkMode={isDarkMode} isLoggedIn={isLoggedIn} />
-          <PiLogsPanel logsData={logsData} loading={loading.logs} isDarkMode={isDarkMode} />
-          <DockerPanel dockerData={dockerData} loading={loading.docker} isDarkMode={isDarkMode} />
+          <PiLogsPanel logsData={logsData} loading={loading.logs} isDarkMode={isDarkMode} isLoggedIn={isLoggedIn} />
+          <DockerPanel dockerData={dockerData} loading={loading.docker} isDarkMode={isDarkMode} isLoggedIn={isLoggedIn} />
           <NetworkGraphsPanel networkData={networkData} loading={loading.network} isDarkMode={isDarkMode} />
         </div>
         

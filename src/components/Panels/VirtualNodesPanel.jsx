@@ -45,24 +45,24 @@ const VirtualNodesPanel = ({ servers, isDarkMode = true, isLoggedIn = false, onK
             {port6000Servers.map((server, index) => (
               <div key={`6000-${index}`} className='mb-[1vh] flex items-center justify-between'>
                 <div>
-                  <strong>{server.protocol}</strong> on port <strong>{server.port}</strong>: <a target='_blank' href={server.protocol.toLowerCase() + "://" + server.hostname} className="text-blue-400 hover:underline">{server.hostname}</a> { localAddresses.includes(window.location.hostname) && (<span>(<strong><a href={server.local.replace('localhost', window.location.hostname)} target="_blank" className='hover:underline'>{server.local.replace('localhost', window.location.hostname)}</a></strong>)</span>) }
+                  <strong className='!select-text'>{server.protocol}</strong> on port <strong className='!select-text'>{server.port}</strong>: <a target='_blank' href={server.protocol.toLowerCase() + "://" + server.hostname} className="text-blue-400 hover:underline !select-text">{server.hostname}</a> { localAddresses.includes(window.location.hostname) && (<span>(<strong><a href={server.local.replace('localhost', window.location.hostname)} target="_blank" className='hover:underline !select-text'>{server.local.replace('localhost', window.location.hostname)}</a></strong>)</span>) }
                 </div>
                 {/* No kill button for port 6000 servers */}
               </div>
             ))}
             
             {/* Horizontal rule if both port 6000 and other servers exist */}
-            {port6000Servers.length > 0 && otherVirtualServers.length > 0 && (
+            {((isLoggedIn &&port6000Servers.length > 0 && otherVirtualServers.length > 0) || !isLoggedIn) && (
               <hr className={`my-4 ${isDarkMode ? 'border-gray-600' : 'border-gray-300'} w-[3rem]`} />
             )}
             
             {/* Other virtual servers */}
-            {otherVirtualServers.map((server, index) => {
+            {isLoggedIn ? otherVirtualServers.map((server, index) => {
               const isKilling = killingServerId === server.hostname.split('.')[0];
               return (
                 <div key={`other-${index}`} className='mb-[1vh] flex items-center justify-between'>
                   <div>
-                    <strong>{server.protocol}</strong> on port <strong>{server.port}</strong>: <a target='_blank' href={server.protocol.toLowerCase() + "://" + server.hostname} className="text-blue-400 hover:underline">{server.hostname}</a> { localAddresses.includes(window.location.hostname) && (<span>(<strong><a href={server.local.replace('localhost', window.location.hostname)} target="_blank" className='hover:underline'>{server.local.replace('localhost', window.location.hostname)}</a></strong>)</span>) }
+                    <strong className='!select-text'>{server.protocol}</strong> on port <strong className='!select-text'>{server.port}</strong>: <a target='_blank' href={server.protocol.toLowerCase() + "://" + server.hostname} className="text-blue-400 hover:underline !select-text">{server.hostname}</a> { localAddresses.includes(window.location.hostname) && (<span>(<strong><a href={server.local.replace('localhost', window.location.hostname)} target="_blank" className='hover:underline !select-text'>{server.local.replace('localhost', window.location.hostname)}</a></strong>)</span>) }
                   </div>
                   {isLoggedIn && (
                     <button
@@ -87,11 +87,15 @@ const VirtualNodesPanel = ({ servers, isDarkMode = true, isLoggedIn = false, onK
                   )}
                 </div>
               );
-            })}
+            }) : (
+              <div className="text-gray-500 italic">
+                {isLoggedIn ? 'No virtual nodes found' : 'You need to log in to see virtual nodes'}
+              </div>
+            )}
           </>
         ) : (
           <div className="text-gray-500 italic">
-            No virtual nodes found
+            {isLoggedIn ? 'No virtual nodes found' : 'You need to log in to see virtual nodes'}
           </div>
         )}
       </div>

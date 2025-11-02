@@ -28,7 +28,7 @@ const PM2Panel = ({ pm2Data, loading, isDarkMode = true, isLoggedIn = false }) =
           pm2Data.map((process, index) => (
             <div key={process.id} className="border-b border-gray-600 pb-3 last:border-b-0">
               <div className="flex items-center justify-between mb-2">
-                <h3 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                <h3 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'} !select-text`}>
                   {process.name}
                 </h3>
                 <span className={`text-sm font-medium ${getStatusColor(process.online)}`}>
@@ -37,10 +37,10 @@ const PM2Panel = ({ pm2Data, loading, isDarkMode = true, isLoggedIn = false }) =
               </div>
               
               <div className="space-y-1 text-sm">
-                <p><strong>ID:</strong> {process.id}</p>
-                <p><strong>PID:</strong> {process.pid}</p>
+                <p><strong>ID:</strong> <span className='!select-text'>{process.id}</span></p>
+                <p><strong>PID:</strong> <span className='!select-text'>{process.pid}</span></p>
                 <p><strong>CPU:</strong> <span className="text-yellow-400">{process.cpu}%</span></p>
-                <p><strong>RAM:</strong> <span className="text-blue-400">{process.ram}</span></p>
+                <p><strong>RAM:</strong> <span className="text-yellow-400">{process.ram}</span></p>
               </div>
 
               {(process.commands && isLoggedIn) && (

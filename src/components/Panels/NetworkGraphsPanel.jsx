@@ -3,7 +3,7 @@ import Card from '../UI/Card';
 import PanelTitle from '../UI/PanelTitle';
 
 const NetworkGraphsPanel = ({ networkData, loading, isDarkMode = true }) => {
-  const [activeGraph, setActiveGraph] = useState('traffic');
+  const [activeGraph, setActiveGraph] = useState('latency');
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedImageUrl, setSelectedImageUrl] = useState('');
 

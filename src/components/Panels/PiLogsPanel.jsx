@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import Card from '../UI/Card';
 import PanelTitle from '../UI/PanelTitle';
 
-const PiLogsPanel = ({ logsData, loading, isDarkMode = true }) => {
+const PiLogsPanel = ({ logsData, loading, isDarkMode = true, isLoggedIn = false }) => {
   const [showAll, setShowAll] = useState(false);
   const [filter, setFilter] = useState('');
   const [selectedLog, setSelectedLog] = useState(null);
   const [showLogModal, setShowLogModal] = useState(false);
 
-  const filteredLogs = logsData ? logsData.filter(log => 
+  const filteredLogs = (logsData && isLoggedIn) ? logsData.filter(log => 
     log.message.toLowerCase().includes(filter.toLowerCase()) ||
     log.host.toLowerCase().includes(filter.toLowerCase())
   ) : [];
@@ -79,7 +79,7 @@ const PiLogsPanel = ({ logsData, loading, isDarkMode = true }) => {
                   <span>{log.host}</span>
                 </div>
                 <div className={`text-sm ${getLogLevelColor(log.message)}`}>
-                  <pre className="whitespace-pre-wrap break-words font-sans">
+                  <pre className="whitespace-pre-wrap break-words font-sans !select-text">
                     {truncated.text}
                   </pre>
                   {truncated.isTruncated && (
@@ -97,7 +97,7 @@ const PiLogsPanel = ({ logsData, loading, isDarkMode = true }) => {
         ) : (
           <div className="text-center py-8">
             <div className="text-gray-500 italic">
-              {filter ? 'No logs match the filter' : 'No logs available'}
+              {filter ? 'No logs match the filter' : isLoggedIn ? 'No logs available' : 'You need to log in to see logs'}
             </div>
           </div>
         )}
@@ -190,7 +190,7 @@ const PiLogsPanel = ({ logsData, loading, isDarkMode = true }) => {
               }`}>
                 <pre className={`whitespace-pre-wrap break-words font-mono text-sm ${
                   getLogLevelColor(selectedLog.message)
-                }`}>
+                } !select-text`}>
                   {selectedLog.message}
                 </pre>
               </div>

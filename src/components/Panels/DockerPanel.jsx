@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import Card from '../UI/Card';
 import PanelTitle from '../UI/PanelTitle';
 
-const DockerPanel = ({ dockerData, loading, isDarkMode = true }) => {
+const DockerPanel = ({ dockerData, loading, isDarkMode = true, isLoggedIn = false }) => {
   const [showAll, setShowAll] = useState(false);
   const [filter, setFilter] = useState('');
 
-  const filteredContainers = dockerData ? dockerData.filter(container => 
+  const filteredContainers = (dockerData && isLoggedIn) ? dockerData.filter(container => 
     container.name.toLowerCase().includes(filter.toLowerCase()) ||
     container.image.toLowerCase().includes(filter.toLowerCase()) ||
     container.status.toLowerCase().includes(filter.toLowerCase())
@@ -16,7 +16,7 @@ const DockerPanel = ({ dockerData, loading, isDarkMode = true }) => {
 
   const getStatusColor = (status) => {
     const stat = status.toLowerCase();
-    if (stat.includes('running')) return 'text-green-400';
+    if (stat.includes('running') || stat.includes('up ')) return 'text-green-400';
     if (stat.includes('stopped') || stat.includes('exited')) return 'text-red-400';
     if (stat.includes('paused')) return 'text-yellow-400';
     return 'text-gray-400';
@@ -24,7 +24,7 @@ const DockerPanel = ({ dockerData, loading, isDarkMode = true }) => {
 
   const getStatusIcon = (status) => {
     const stat = status.toLowerCase();
-    if (stat.includes('running')) return '🟢';
+    if (stat.includes('running') || stat.includes('up ')) return '🟢';
     if (stat.includes('stopped') || stat.includes('exited')) return '🔴';
     if (stat.includes('paused')) return '🟡';
     return '⚪';
@@ -63,7 +63,7 @@ const DockerPanel = ({ dockerData, loading, isDarkMode = true }) => {
           displayedContainers.map((container, index) => (
             <div key={container.id} className="border-b border-gray-600 pb-3 last:border-b-0">
               <div className="flex items-center justify-between mb-2">
-                <h3 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                <h3 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'} !select-text`}>
                   {container.name}
                 </h3>
                 <div className="flex items-center space-x-2">
@@ -75,9 +75,9 @@ const DockerPanel = ({ dockerData, loading, isDarkMode = true }) => {
               </div>
               
               <div className="space-y-1 text-sm">
-                <p><strong>ID:</strong> {container.id}</p>
+                <p><strong>ID:</strong> <span className='!select-text'>{container.id}</span></p>
                 <p><strong>Image:</strong> <span className="text-blue-400">{container.image}</span></p>
-                <p><strong>Command:</strong> <span className="text-gray-400 font-mono text-xs">{container.command}</span></p>
+                <p><strong>Command:</strong> <span className="text-gray-400 font-mono text-xs !select-text">{container.command}</span></p>
                 
                 {container.ports && container.ports.length > 0 && (
                   <div>
@@ -103,7 +103,7 @@ const DockerPanel = ({ dockerData, loading, isDarkMode = true }) => {
         ) : (
           <div className="text-center py-8">
             <div className="text-gray-500 italic">
-              {filter ? 'No containers match the filter' : 'No Docker containers found'}
+              {filter ? 'No containers match the filter' : (isLoggedIn ? 'No Docker containers found' : 'You need to log in to see Docker containers')}
             </div>
           </div>
         )}

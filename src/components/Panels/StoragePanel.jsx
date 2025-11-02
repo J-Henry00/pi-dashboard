@@ -22,7 +22,7 @@ const StoragePanel = ({ storage, loading, isLoggedIn = false, isDarkMode = true 
               }`}
               style={{ maxHeight: '40vh' }}
             >
-              {!isLoggedIn ?  
+              {isLoggedIn ?  
                 <>
                   {storage.advanced && storage.advanced.length > 0 ? (
                     storage.advanced.map((s, idx) => (
