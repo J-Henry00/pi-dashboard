@@ -8,8 +8,9 @@ async function getPM2Data() {
   };
 
   try {
-    var pm2Data = (await axios.get('https://pi-system.hjindra.org/pm2', config))
-      .data;
+    var pm2Data = (
+      await axios.get(import.meta.env.VITE_X_API_URL + '/pm2', config)
+    ).data;
 
     if (!pm2Data.success) return null;
 

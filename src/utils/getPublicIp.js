@@ -7,11 +7,6 @@ async function getPublicIP() {
     },
   };
 
-  console.log(
-    'https://pi-system.hjindra.org/sysinfo?ipkey=' +
-      import.meta.env.VITE_X_IP_KEY
-  );
-
   return (
     await axios.get(
       'https://pi-system.hjindra.org/sysinfo?ipkey=' +

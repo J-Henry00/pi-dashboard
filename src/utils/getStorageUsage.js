@@ -9,11 +9,11 @@ async function getStats() {
   };
 
   var storageInfo = (
-    await axios.get('https://pi-system.hjindra.org/storage', config)
+    await axios.get(import.meta.env.VITE_X_API_URL + '/storage', config)
   ).data;
   var advancedStorageInfo = (
     await axios.get(
-      'https://pi-system.hjindra.org/storage?showAll=true',
+      import.meta.env.VITE_X_API_URL + '/storage?showAll=true',
       config
     )
   ).data;

@@ -9,10 +9,10 @@ async function getStats() {
   };
 
   var sysInfo = (
-    await axios.get('https://pi-system.hjindra.org/sysinfo', config)
+    await axios.get(import.meta.env.VITE_X_API_URL + '/sysinfo', config)
   ).data;
   var resourcesInfo = (
-    await axios.get('https://pi-system.hjindra.org/resources', config)
+    await axios.get(import.meta.env.VITE_X_API_URL + '/resources', config)
   ).data;
 
   if (!sysInfo.success || !resourcesInfo.success) {

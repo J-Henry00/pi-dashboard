@@ -9,7 +9,10 @@ async function getDockerContainers() {
 
   try {
     var dockerData = (
-      await axios.get('https://pi-system.hjindra.org/dockerContainers', config)
+      await axios.get(
+        import.meta.env.VITE_X_API_URL + '/dockerContainers',
+        config
+      )
     ).data;
 
     if (!dockerData.success) return null;

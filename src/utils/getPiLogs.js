@@ -9,7 +9,7 @@ async function getPiLogs() {
 
   try {
     var logsData = (
-      await axios.get('https://pi-system.hjindra.org/pilogs', config)
+      await axios.get(import.meta.env.VITE_X_API_URL + '/pilogs', config)
     ).data;
 
     if (!logsData.success) return null;

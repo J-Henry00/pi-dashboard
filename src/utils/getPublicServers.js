@@ -8,7 +8,7 @@ async function getPublicServers() {
   };
 
   var activeServers = (
-    await axios.get('https://pi-system.hjindra.org/services', config)
+    await axios.get(import.meta.env.VITE_X_API_URL + '/services', config)
   ).data;
 
   if (!activeServers.success) return null;
