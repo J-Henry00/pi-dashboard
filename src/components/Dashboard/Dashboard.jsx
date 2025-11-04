@@ -240,7 +240,6 @@ const Dashboard = () => {
       ...prev, 
       servers: true, 
       storage: true,
-      pm2: true,
       logs: true,
       docker: true,
       network: true
@@ -249,7 +248,6 @@ const Dashboard = () => {
       const [serversData, storageData, pm2DataResult, logsDataResult, dockerDataResult, networkDataResult] = await Promise.all([
         getPublicServers(),
         getStorage(),
-        getPM2Data(),
         getPiLogs(),
         getDockerContainers(),
         getNetworkGraphs()
@@ -257,7 +255,6 @@ const Dashboard = () => {
       
       setServers(serversData);
       setStorageInfo(storageData);
-      setPm2Data(pm2DataResult || []);
       setLogsData(logsDataResult || []);
       setDockerData(dockerDataResult || []);
       setNetworkData(networkDataResult);
@@ -266,7 +263,6 @@ const Dashboard = () => {
         ...prev, 
         servers: false, 
         storage: false,
-        pm2: false,
         logs: false,
         docker: false,
         network: false
@@ -278,7 +274,6 @@ const Dashboard = () => {
         ...prev, 
         servers: false, 
         storage: false,
-        pm2: false,
         logs: false,
         docker: false,
         network: false
@@ -362,41 +357,67 @@ const Dashboard = () => {
     }
   };
 
-  const handleRestartConfirm = async () => {
-    setShowRestartModal(false);
-    
+  const handleKillAllNodes = async () => {
     try {
-      // For testing purposes - commented out the actual reboot command
-      const { exec } = require('child_process');
-      exec('sudo reboot', (error, stdout, stderr) => {
-        if (error) {
-          console.error('Reboot error:', error);
-          setModal({ 
-            isOpen: true, 
-            text: 'Failed to restart system', 
-            protocol: 'NotAConnect' 
-          });
-        }
-       setModal({ 
-        isOpen: true, 
-        text: 'System restart initiated', 
-        protocol: 'NotAConnect' 
-      });
-      });
-      
-      // For testing - just show success message
-      // setModal({ 
-      //   isOpen: true, 
-      //   text: 'System restart initiated (testing mode)', 
-      //   protocol: 'NotAConnect' 
-      // });
+      const response = await axios.get('https://virtual.hjindra.org/api/manage/all/kill');
+      if (response.data.success) {
+        setModal({ 
+          isOpen: true, 
+          text: 'Successfully killed all virtual nodes', 
+          protocol: 'NotAConnect' 
+        });
+        handleRefresh();
+      }
     } catch (error) {
       setModal({ 
         isOpen: true, 
-        text: 'Failed to restart system', 
+        text: 'There was an error killing all virtual nodes', 
         protocol: 'NotAConnect' 
       });
     }
+  };
+
+  const handleRestartConfirm = async () => {
+    setShowRestartModal(false);
+
+    setModal({
+      isOpen: true,
+      text: 'This feature is locked and not working',
+      protocol: 'NotAConnect'
+    });
+    
+    // try {
+    //   // For testing purposes - commented out the actual reboot command
+    //   const { exec } = require('child_process');
+    //   exec('sudo reboot', (error, stdout, stderr) => {
+    //     if (error) {
+    //       console.error('Reboot error:', error);
+    //       setModal({ 
+    //         isOpen: true, 
+    //         text: 'Failed to restart system', 
+    //         protocol: 'NotAConnect' 
+    //       });
+    //     }
+    //    setModal({ 
+    //     isOpen: true, 
+    //     text: 'System restart initiated', 
+    //     protocol: 'NotAConnect' 
+    //   });
+    //   });
+      
+    //   // For testing - just show success message
+    //   // setModal({ 
+    //   //   isOpen: true, 
+    //   //   text: 'System restart initiated (testing mode)', 
+    //   //   protocol: 'NotAConnect' 
+    //   // });
+    // } catch (error) {
+    //   setModal({ 
+    //     isOpen: true, 
+    //     text: 'Failed to restart system', 
+    //     protocol: 'NotAConnect' 
+    //   });
+    // }
   };
 
   const toggleDarkMode = () => {
@@ -446,6 +467,8 @@ const Dashboard = () => {
               isLoggedIn={isLoggedIn}
               onKillNode={handleKillNode}
               killingServerId={killingServerId}
+              loading={loading}
+              onKillAllNodes={handleKillAllNodes}
             />
           </div>
         </div>

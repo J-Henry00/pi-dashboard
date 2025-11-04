@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Card from '../UI/Card';
+import ConfirmModal from '../UI/ConfirmModal';
 import PanelTitle from '../UI/PanelTitle';
-
 import localAddresses from '../../utils/localAddresses';
 
-const VirtualNodesPanel = ({ servers, isDarkMode = true, isLoggedIn = false, onKillNode, killingServerId }) => {
+const VirtualNodesPanel = ({ servers, isDarkMode = true, isLoggedIn = false, onKillNode, killingServerId, loading, onKillAllNodes }) => {
+  const [showKillAllModal, setShowKillAllModal] = useState(false);
+
+  const handleKillAllConfirm = () => {
+    setShowKillAllModal(false);
+    if (onKillAllNodes) {
+      onKillAllNodes();
+    }
+  };
+
   // Filter servers to only include those with "virtual" in their hostname
   const virtualServers = servers.filter(server => 
     server.hostname && server.hostname.toLowerCase().includes('virtual')
@@ -32,7 +41,19 @@ const VirtualNodesPanel = ({ servers, isDarkMode = true, isLoggedIn = false, onK
 
   return (
     <Card isDarkMode={isDarkMode}>
-      <PanelTitle title="Virtual Nodes" isDarkMode={isDarkMode} />
+      {/* Header with title and Kill All button */}
+      <div className="flex items-center justify-between mb-4">
+        <PanelTitle title="Virtual Nodes" isDarkMode={isDarkMode} />
+        {isLoggedIn && (
+          <button
+            onClick={() => setShowKillAllModal(true)}
+            className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md transition-colors duration-200"
+            title="Kill All Virtual Nodes"
+          >
+            Kill all Virtual Nodes
+          </button>
+        )}
+      </div>
       <div
         className={`space-y-2 overflow-y-auto custom-scrollbar ${
           isDarkMode ? 'text-gray-300' : 'text-gray-700'
@@ -115,6 +136,17 @@ const VirtualNodesPanel = ({ servers, isDarkMode = true, isLoggedIn = false, onK
           scrollbar-color: #fff transparent;
         }
       `}</style>
+      
+      {/* Kill All Modal */}
+      <ConfirmModal
+        isOpen={showKillAllModal}
+        onClose={() => setShowKillAllModal(false)}
+        onConfirm={handleKillAllConfirm}
+        title="Kill All Virtual Nodes"
+        message="Are you sure you want to kill all virtual nodes? This action cannot be undone."
+        confirmText="Yes, Kill All"
+        cancelText="Cancel"
+      />
     </Card>
   );
 };

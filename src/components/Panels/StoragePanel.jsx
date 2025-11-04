@@ -11,9 +11,20 @@ const StoragePanel = ({ storage, loading, isLoggedIn = false, isDarkMode = true 
         isDarkMode ? 'text-gray-300' : 'text-gray-700'
       }`}>
         {loading ? (
-          <div className="text-center py-8">
-            <div className={isDarkMode ? 'text-white' : 'text-gray-900'}>Loading...</div>
-          </div>
+          <>
+            <div
+              className={`space-y-2 overflow-y-auto custom-scrollbar ${
+                isDarkMode ? 'text-gray-300' : 'text-gray-700'
+              }`}
+              style={{ maxHeight: '40vh' }}
+            >
+              <div className="mb-2">
+                          <p><strong>File System: </strong> Loading...</p>
+                          <p><strong>Mounted on: </strong> Loading...</p>
+                          <p><strong>Capacity: </strong> <span>Loading...</span></p>
+                        </div>
+            </div>
+          </>
         ) : storage ? (
           <>
             <div

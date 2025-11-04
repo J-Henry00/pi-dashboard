@@ -15,9 +15,15 @@ const PiStatsPanel = ({ stats, loading, isLoggedIn, isDarkMode = true }) => {
         isDarkMode ? 'text-gray-300' : 'text-gray-700'
       }`}>
         {loading ? (
-          <div className="text-center py-8">
-            <div className={isDarkMode ? 'text-white' : 'text-gray-900'}>Loading...</div>
-          </div>
+          <>
+            <p><strong>hostname:</strong> <span>Loading...</span></p>
+            <p><strong>architecture:</strong> <span>Loading...</span></p>
+            <p><strong>CPU Temp:</strong> <span>Loading...</span></p>
+            <hr className={`my-4 ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`} />
+            <p><strong>CPU:</strong> <span>Loading...</span></p>
+            <p><strong>RAM:</strong> <span>Loading...</span> </p>
+            <p><strong>Uptime:</strong> Loading...</p>
+          </>
         ) : stats ? (
           <>
             <p><strong>hostname:</strong> <span className='!select-text'>{stats.hostname}</span></p>
