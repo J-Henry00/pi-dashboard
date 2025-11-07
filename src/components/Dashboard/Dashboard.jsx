@@ -32,36 +32,35 @@ const CustomModal = ({ isOpen, onClose, text, protocol }) => {
   };
 
   return (
-    <div 
-      className="fixed inset-0 flex items-center justify-center z-51" 
+    <div
+      className='fixed inset-0 flex items-center justify-center z-51'
       onClick={handleBackdropClick}
-      style={{ 
+      style={{
         background: 'rgba(0, 0, 0, 0.3)',
         backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)'
-      }}
-    >
+        WebkitBackdropFilter: 'blur(10px)',
+      }}>
       {/* Modal content */}
-      <div 
-        className="relative bg-[#2d3748] rounded-lg p-6 max-w-md mx-4 shadow-xl"
+      <div
+        className='relative bg-[#2d3748] rounded-lg p-6 max-w-md mx-4 shadow-xl'
         onClick={(e) => e.stopPropagation()} // Prevent modal content clicks from closing modal
       >
-        <div className="text-white text-center mb-6">
-        <p className="text-lg">
-          {protocol.toUpperCase() !== 'NOTACONNECT' && (
-            <>
-              Download software for connecting to {protocol.toUpperCase()} server and use address
-              <br />
-            </>
-          )}
-          <strong>{text}</strong>
-        </p>
+        <div className='text-white text-center mb-6'>
+          <p className='text-lg'>
+            {protocol.toUpperCase() !== 'NOTACONNECT' && (
+              <>
+                Download software for connecting to {protocol.toUpperCase()}{' '}
+                server and use address
+                <br />
+              </>
+            )}
+            <strong>{text}</strong>
+          </p>
         </div>
-        <div className="flex justify-center">
+        <div className='flex justify-center'>
           <button
             onClick={onClose}
-            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded transition-colors duration-200"
-          >
+            className='bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded transition-colors duration-200'>
             OK
           </button>
         </div>
@@ -85,7 +84,7 @@ const Dashboard = () => {
     pm2: true,
     logs: true,
     docker: true,
-    network: true
+    network: true,
   });
   const [error, setError] = useState(null);
   const [modal, setModal] = useState({ isOpen: false, text: '', protocol: '' });
@@ -93,64 +92,67 @@ const Dashboard = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRestartModal, setShowRestartModal] = useState(false);
-  const [adminCredentials, setAdminCredentials] = useState({ username: '', password: '' });
+  const [adminCredentials, setAdminCredentials] = useState({
+    username: '',
+    password: '',
+  });
   // Add new state to track the ID of the server being killed
   const [killingServerId, setKillingServerId] = useState(null);
 
   async function fetchData() {
     try {
       // Fetch Pi stats
-      setLoading(prev => ({ ...prev, piStats: true }));
+      setLoading((prev) => ({ ...prev, piStats: true }));
       await fetchStats();
-      setLoading(prev => ({ ...prev, piStats: false }));
+      setLoading((prev) => ({ ...prev, piStats: false }));
 
       // Fetch servers
-      setLoading(prev => ({ ...prev, servers: true }));
+      setLoading((prev) => ({ ...prev, servers: true }));
       const serversData = await getPublicServers();
       setServers(serversData);
-      setLoading(prev => ({ ...prev, servers: false }));
+      setLoading((prev) => ({ ...prev, servers: false }));
 
       // Fetch storage
-      setLoading(prev => ({ ...prev, storage: true }));
+      setLoading((prev) => ({ ...prev, storage: true }));
       const storageData = await getStorage();
       setStorageInfo(storageData);
-      setLoading(prev => ({ ...prev, storage: false }));
+      setLoading((prev) => ({ ...prev, storage: false }));
 
       // Fetch PM2 data
-      setLoading(prev => ({ ...prev, pm2: true }));
+      setLoading((prev) => ({ ...prev, pm2: true }));
       const pm2DataResult = await getPM2Data();
       setPm2Data(pm2DataResult || []);
-      setLoading(prev => ({ ...prev, pm2: false }));
+      setLoading((prev) => ({ ...prev, pm2: false }));
 
       // Fetch PI logs
-      setLoading(prev => ({ ...prev, logs: true }));
+      setLoading((prev) => ({ ...prev, logs: true }));
       const logsDataResult = await getPiLogs();
       setLogsData(logsDataResult || []);
-      setLoading(prev => ({ ...prev, logs: false }));
+      setLoading((prev) => ({ ...prev, logs: false }));
 
       // Fetch Docker containers
-      setLoading(prev => ({ ...prev, docker: true }));
+      setLoading((prev) => ({ ...prev, docker: true }));
       const dockerDataResult = await getDockerContainers();
       setDockerData(dockerDataResult || []);
-      setLoading(prev => ({ ...prev, docker: false }));
+      setLoading((prev) => ({ ...prev, docker: false }));
 
       // Fetch network graphs
-      setLoading(prev => ({ ...prev, network: true }));
+      setLoading((prev) => ({ ...prev, network: true }));
       const networkDataResult = await getNetworkGraphs();
       setNetworkData(networkDataResult);
-      setLoading(prev => ({ ...prev, network: false }));
+      setLoading((prev) => ({ ...prev, network: false }));
     } catch (err) {
       setError(err.message);
       console.error(err);
-      setLoading(prev => ({ 
-        ...prev, 
-        piStats: false, 
-        servers: false, 
+      setLoading((prev) => ({
+        ...prev,
+        piStats: false,
+        servers: false,
         storage: false,
         pm2: false,
         logs: false,
         docker: false,
-        network: false
+        network: false,
       }));
     }
   }
@@ -170,7 +172,7 @@ const Dashboard = () => {
     TempF: 120,
     cpu: [25, 22, 28, 24],
     ram: '1 / 8 GB',
-    uptime: '1d, 5h, 2m, 30s'
+    uptime: '1d, 5h, 2m, 30s',
   };
 
   const mockServers = [
@@ -188,34 +190,34 @@ const Dashboard = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  if (error) return <div className="text-red-500">Error: {error}</div>;
+  if (error) return <div className='text-red-500'>Error: {error}</div>;
 
   const handleAction = (actionType) => {
     const actions = {
       'web-ssh': {
         action: 'new_page',
-        target: 'https://ssh-pi.hjindra.org/'
+        target: 'https://ssh-pi.hjindra.org/',
       },
       ssh: {
         action: 'display-modal',
-        target: 'pi@hjindra.org'
+        target: 'pi@hjindra.org',
       },
       vnc: {
         action: 'display-modal',
-        target: 'vnc.hjindra.org'
+        target: 'vnc.hjindra.org',
       },
       'pi-connect': {
         action: 'new_page',
-        target: 'https://connect.raspberrypi.com/devices'
+        target: 'https://connect.raspberrypi.com/devices',
       },
       'vscode-web': {
         action: 'new_page',
-        target: 'https://code.hjindra.org/'
+        target: 'https://code.hjindra.org/',
       },
       'cloud-storage': {
         action: 'new_page',
-        target: 'https://disk.hjindra.org/'
-      }
+        target: 'https://disk.hjindra.org/',
+      },
     };
 
     const actionConfig = actions[actionType];
@@ -226,7 +228,11 @@ const Dashboard = () => {
       window.open(actionConfig.target, '_blank');
     } else if (actionConfig.action === 'display-modal') {
       // Show custom modal with the target text
-      setModal({ isOpen: true, text: actionConfig.target, protocol: actionType });
+      setModal({
+        isOpen: true,
+        text: actionConfig.target,
+        protocol: actionType,
+      });
     }
   };
 
@@ -236,47 +242,54 @@ const Dashboard = () => {
 
   const handleRefresh = async () => {
     // Refresh all data except PiStatsPanel which refreshes automatically via interval
-    setLoading(prev => ({ 
-      ...prev, 
-      servers: true, 
+    setLoading((prev) => ({
+      ...prev,
+      servers: true,
       storage: true,
       logs: true,
       docker: true,
-      network: true
+      network: true,
     }));
     try {
-      const [serversData, storageData, pm2DataResult, logsDataResult, dockerDataResult, networkDataResult] = await Promise.all([
+      const [
+        serversData,
+        storageData,
+        pm2DataResult,
+        logsDataResult,
+        dockerDataResult,
+        networkDataResult,
+      ] = await Promise.all([
         getPublicServers(),
         getStorage(),
         getPiLogs(),
         getDockerContainers(),
-        getNetworkGraphs()
+        getNetworkGraphs(),
       ]);
-      
+
       setServers(serversData);
       setStorageInfo(storageData);
       setLogsData(logsDataResult || []);
       setDockerData(dockerDataResult || []);
       setNetworkData(networkDataResult);
-      
-      setLoading(prev => ({ 
-        ...prev, 
-        servers: false, 
+
+      setLoading((prev) => ({
+        ...prev,
+        servers: false,
         storage: false,
         logs: false,
         docker: false,
-        network: false
+        network: false,
       }));
     } catch (err) {
       setError(err.message);
       console.error(err);
-      setLoading(prev => ({ 
-        ...prev, 
-        servers: false, 
+      setLoading((prev) => ({
+        ...prev,
+        servers: false,
         storage: false,
         logs: false,
         docker: false,
-        network: false
+        network: false,
       }));
     }
   };
@@ -288,12 +301,14 @@ const Dashboard = () => {
   const handleLoginSubmit = (username, password) => {
     try {
       // Check credentials against environment variables
-      const envUser = import.meta.env.VITE_X_ADMIN_USER || process.env.X_ADMIN_USER;
-      const envPass = import.meta.env.VITE_X_ADMIN_PASSWORD || process.env.X_ADMIN_PASSWORD;
+      const envUser =
+        import.meta.env.VITE_X_ADMIN_USER || process.env.X_ADMIN_USER;
+      const envPass =
+        import.meta.env.VITE_X_ADMIN_PASSWORD || process.env.X_ADMIN_PASSWORD;
       const response = {
-        ok: username === envUser && password === envPass
+        ok: username === envUser && password === envPass,
       };
-      
+
       if (response.ok) {
         setIsLoggedIn(true);
         setShowLoginModal(false);
@@ -301,17 +316,17 @@ const Dashboard = () => {
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('adminUser', username);
       } else {
-        setModal({ 
-          isOpen: true, 
-          text: 'Invalid credentials', 
-          protocol: 'NotAConnect' 
+        setModal({
+          isOpen: true,
+          text: 'Invalid credentials',
+          protocol: 'NotAConnect',
         });
       }
     } catch (error) {
-      setModal({ 
-        isOpen: true, 
-        text: 'Login failed. Please try again.', 
-        protocol: 'NotAConnect' 
+      setModal({
+        isOpen: true,
+        text: 'Login failed. Please try again.',
+        protocol: 'NotAConnect',
       });
     }
   };
@@ -328,28 +343,30 @@ const Dashboard = () => {
     setKillingServerId(serverHostname);
 
     try {
-      const response = await axios.get(`https://virtual.hjindra.org/api/manage/${serverHostname}/kill`);
-      
+      const response = await axios.get(
+        `https://virtual.hjindra.org/api/manage/${serverHostname}/kill`
+      );
+
       if (response.data.success) {
-        setModal({ 
-          isOpen: true, 
-          text: 'Successfully ended virtual node', 
-          protocol: 'NotAConnect' 
+        setModal({
+          isOpen: true,
+          text: 'Successfully ended virtual node',
+          protocol: 'NotAConnect',
         });
         // Refresh servers after successful kill
         handleRefresh();
       } else {
-        setModal({ 
-          isOpen: true, 
-          text: 'There was an error killing virtual node', 
-          protocol: 'NotAConnect' 
+        setModal({
+          isOpen: true,
+          text: 'There was an error killing virtual node',
+          protocol: 'NotAConnect',
         });
       }
     } catch (error) {
-      setModal({ 
-        isOpen: true, 
-        text: 'There was an error killing virtual node', 
-        protocol: 'NotAConnect' 
+      setModal({
+        isOpen: true,
+        text: 'There was an error killing virtual node',
+        protocol: 'NotAConnect',
       });
     } finally {
       // Reset the loading state regardless of the outcome
@@ -359,20 +376,22 @@ const Dashboard = () => {
 
   const handleKillAllNodes = async () => {
     try {
-      const response = await axios.get('https://virtual.hjindra.org/api/manage/all/kill');
+      const response = await axios.get(
+        'https://virtual.hjindra.org/api/manage/all/kill'
+      );
       if (response.data.success) {
-        setModal({ 
-          isOpen: true, 
-          text: 'Successfully killed all virtual nodes', 
-          protocol: 'NotAConnect' 
+        setModal({
+          isOpen: true,
+          text: 'Successfully killed all virtual nodes',
+          protocol: 'NotAConnect',
         });
         handleRefresh();
       }
     } catch (error) {
-      setModal({ 
-        isOpen: true, 
-        text: 'There was an error killing all virtual nodes', 
-        protocol: 'NotAConnect' 
+      setModal({
+        isOpen: true,
+        text: 'There was an error killing all virtual nodes',
+        protocol: 'NotAConnect',
       });
     }
   };
@@ -380,50 +399,28 @@ const Dashboard = () => {
   const handleRestartConfirm = async () => {
     setShowRestartModal(false);
 
-    setModal({
-      isOpen: true,
-      text: 'This feature is locked and not working',
-      protocol: 'NotAConnect'
-    });
-    
-    // try {
-    //   // For testing purposes - commented out the actual reboot command
-    //   const { exec } = require('child_process');
-    //   exec('sudo reboot', (error, stdout, stderr) => {
-    //     if (error) {
-    //       console.error('Reboot error:', error);
-    //       setModal({ 
-    //         isOpen: true, 
-    //         text: 'Failed to restart system', 
-    //         protocol: 'NotAConnect' 
-    //       });
-    //     }
-    //    setModal({ 
-    //     isOpen: true, 
-    //     text: 'System restart initiated', 
-    //     protocol: 'NotAConnect' 
-    //   });
-    //   });
-      
-    //   // For testing - just show success message
-    //   // setModal({ 
-    //   //   isOpen: true, 
-    //   //   text: 'System restart initiated (testing mode)', 
-    //   //   protocol: 'NotAConnect' 
-    //   // });
-    // } catch (error) {
-    //   setModal({ 
-    //     isOpen: true, 
-    //     text: 'Failed to restart system', 
-    //     protocol: 'NotAConnect' 
-    //   });
-    // }
+    const response = await axios.get(
+      'https://pi-system.hjindra.org/restart-server?restartkey=' +
+        import.meta.env.VITE_X_RESTART_KEY
+    );
+    if (response.data.success)
+      setModal({
+        isOpen: true,
+        text: 'Server rebooted. Wait a while before accessing the control panel again.',
+        protocol: 'NotAConnect',
+      });
+    else
+      setModal({
+        isOpen: true,
+        text: 'Error restarting the server.',
+        protocol: 'NotAConnect',
+      });
   };
 
   const toggleDarkMode = () => {
     const newMode = !isDarkMode;
     setIsDarkMode(newMode);
-    
+
     // Store preference in localStorage
     localStorage.setItem('theme', newMode ? 'dark' : 'light');
   };
@@ -431,39 +428,74 @@ const Dashboard = () => {
   // Initialize theme from localStorage on component mount
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const prefersDark = window.matchMedia(
+      '(prefers-color-scheme: dark)'
+    ).matches;
     const shouldBeDark = savedTheme ? savedTheme === 'dark' : prefersDark;
-    
+
     setIsDarkMode(shouldBeDark);
   }, []);
 
   return (
-    <div className={`p-8 min-h-screen transition-colors duration-300 ${
-      isDarkMode 
-        ? 'bg-[#1f2328] text-white' 
-        : 'bg-gray-100 text-gray-900'
-    }`}>
-      <h1 className="text-4xl font-bold text-center mb-8">Raspberry PI</h1>
-      <div className="space-y-8 max-w-[95rem] mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <PiStatsPanel stats={piStats} loading={loading.piStats} isDarkMode={isDarkMode} isLoggedIn={isLoggedIn} />
-          <StoragePanel storage={storageInfo} loading={loading.storage} isDarkMode={isDarkMode} isLoggedIn={isLoggedIn} />
-          <ServersPanel servers={servers} loading={loading.servers} isDarkMode={isDarkMode} isLoggedIn={isLoggedIn} />
+    <div
+      className={`p-8 min-h-screen transition-colors duration-300 ${
+        isDarkMode ? 'bg-[#1f2328] text-white' : 'bg-gray-100 text-gray-900'
+      }`}>
+      <h1 className='text-4xl font-bold text-center mb-8'>Raspberry PI</h1>
+      <div className='space-y-8 max-w-[95rem] mx-auto'>
+        <div className='grid grid-cols-1 md:grid-cols-4 gap-8'>
+          <PiStatsPanel
+            stats={piStats}
+            loading={loading.piStats}
+            isDarkMode={isDarkMode}
+            isLoggedIn={isLoggedIn}
+          />
+          <StoragePanel
+            storage={storageInfo}
+            loading={loading.storage}
+            isDarkMode={isDarkMode}
+            isLoggedIn={isLoggedIn}
+          />
+          <ServersPanel
+            servers={servers}
+            loading={loading.servers}
+            isDarkMode={isDarkMode}
+            isLoggedIn={isLoggedIn}
+          />
           <ConnectPanel onConnect={handleAction} isDarkMode={isDarkMode} />
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <PM2Panel pm2Data={pm2Data} loading={loading.pm2} isDarkMode={isDarkMode} isLoggedIn={isLoggedIn} />
-          <PiLogsPanel logsData={logsData} loading={loading.logs} isDarkMode={isDarkMode} isLoggedIn={isLoggedIn} />
-          <DockerPanel dockerData={dockerData} loading={loading.docker} isDarkMode={isDarkMode} isLoggedIn={isLoggedIn} />
-          <NetworkGraphsPanel networkData={networkData} loading={loading.network} isDarkMode={isDarkMode} />
+
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8'>
+          <PM2Panel
+            pm2Data={pm2Data}
+            loading={loading.pm2}
+            isDarkMode={isDarkMode}
+            isLoggedIn={isLoggedIn}
+          />
+          <PiLogsPanel
+            logsData={logsData}
+            loading={loading.logs}
+            isDarkMode={isDarkMode}
+            isLoggedIn={isLoggedIn}
+          />
+          <DockerPanel
+            dockerData={dockerData}
+            loading={loading.docker}
+            isDarkMode={isDarkMode}
+            isLoggedIn={isLoggedIn}
+          />
+          <NetworkGraphsPanel
+            networkData={networkData}
+            loading={loading.network}
+            isDarkMode={isDarkMode}
+          />
         </div>
-        
-        <div className="flex justify-center">
-          <div className="w-full md:w-2/3">
-            <VirtualNodesPanel 
-              servers={servers} 
-              isDarkMode={isDarkMode} 
+
+        <div className='flex justify-center'>
+          <div className='w-full md:w-2/3'>
+            <VirtualNodesPanel
+              servers={servers}
+              isDarkMode={isDarkMode}
               isLoggedIn={isLoggedIn}
               onKillNode={handleKillNode}
               killingServerId={killingServerId}
@@ -473,87 +505,144 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      <CustomModal 
-        isOpen={modal.isOpen} 
-        onClose={closeModal} 
-        text={modal.text} 
+      <CustomModal
+        isOpen={modal.isOpen}
+        onClose={closeModal}
+        text={modal.text}
         protocol={modal.protocol}
       />
-      
-      <LoginModal 
+
+      <LoginModal
         isOpen={showLoginModal}
         onClose={() => setShowLoginModal(false)}
         onLogin={handleLoginSubmit}
       />
-      
+
       <ConfirmModal
         isOpen={showRestartModal}
         onClose={() => setShowRestartModal(false)}
         onConfirm={handleRestartConfirm}
-        title="Restart System"
-        message="Are you sure you want to restart the Raspberry PI? This will reboot the entire system."
-        confirmText="Yes"
-        cancelText="No"
+        title='Restart System'
+        message='Are you sure you want to restart the Raspberry PI? This will reboot the entire system.'
+        confirmText='Yes'
+        cancelText='No'
       />
-      
+
       {/* Floating Control Panel */}
-      <div className="fixed top-1/2 left-2 -translate-y-1/2 sm:top-4 sm:right-4 sm:left-auto sm:translate-y-0 z-40">
-        <div className={`rounded-lg shadow-lg border transition-colors duration-300 p-2 sm:p-3 ${
-          isDarkMode 
-            ? 'bg-[#2d3748] border-gray-600' 
-            : 'bg-white border-gray-300'
-        }`}>
-          <div className="flex flex-col space-y-1 sm:flex-row sm:space-y-0 sm:space-x-2">
+      <div className='fixed top-1/2 left-2 -translate-y-1/2 sm:top-4 sm:right-4 sm:left-auto sm:translate-y-0 z-40'>
+        <div
+          className={`rounded-lg shadow-lg border transition-colors duration-300 p-2 sm:p-3 ${
+            isDarkMode
+              ? 'bg-[#2d3748] border-gray-600'
+              : 'bg-white border-gray-300'
+          }`}>
+          <div className='flex flex-col space-y-1 sm:flex-row sm:space-y-0 sm:space-x-2'>
             <button
               onClick={handleRefresh}
-              className="p-1 sm:p-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-md transition-all duration-200 touch-manipulation min-h-[26px] min-w-[26px] sm:min-h-[44px] sm:min-w-[44px] flex items-center justify-center"
-              title="Refresh servers"
-            >
-              <svg className="w-2.5 h-2.5 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              className='p-1 sm:p-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-md transition-all duration-200 touch-manipulation min-h-[26px] min-w-[26px] sm:min-h-[44px] sm:min-w-[44px] flex items-center justify-center'
+              title='Refresh servers'>
+              <svg
+                className='w-2.5 h-2.5 sm:w-5 sm:h-5'
+                fill='none'
+                stroke='currentColor'
+                viewBox='0 0 24 24'>
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth={2}
+                  d='M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15'
+                />
               </svg>
             </button>
-            
+
             <button
               onClick={isLoggedIn ? handleLogout : handleLogin}
-              className={`p-1 sm:p-2 ${isLoggedIn ? 'bg-red-600 hover:bg-red-700 active:bg-red-800' : 'bg-green-600 hover:bg-green-700 active:bg-green-800'} text-white rounded-md transition-all duration-200 touch-manipulation min-h-[26px] min-w-[26px] sm:min-h-[44px] sm:min-w-[44px] flex items-center justify-center`}
-              title={isLoggedIn ? "Log Out" : "Log In"}
-            >
+              className={`p-1 sm:p-2 ${
+                isLoggedIn
+                  ? 'bg-red-600 hover:bg-red-700 active:bg-red-800'
+                  : 'bg-green-600 hover:bg-green-700 active:bg-green-800'
+              } text-white rounded-md transition-all duration-200 touch-manipulation min-h-[26px] min-w-[26px] sm:min-h-[44px] sm:min-w-[44px] flex items-center justify-center`}
+              title={isLoggedIn ? 'Log Out' : 'Log In'}>
               {isLoggedIn ? (
-                <svg className="w-2.5 h-2.5 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H3m4 4v1a3 3 0 003 3h4a3 3 0 003-3V7a3 3 0 00-3-3H7a3 3 0 00-3 3v1" />
+                <svg
+                  className='w-2.5 h-2.5 sm:w-5 sm:h-5'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'>
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M17 16l4-4m0 0l-4-4m4 4H3m4 4v1a3 3 0 003 3h4a3 3 0 003-3V7a3 3 0 00-3-3H7a3 3 0 00-3 3v1'
+                  />
                 </svg>
               ) : (
-                <svg className="w-2.5 h-2.5 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                <svg
+                  className='w-2.5 h-2.5 sm:w-5 sm:h-5'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'>
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1'
+                  />
                 </svg>
               )}
             </button>
-            
+
             {isLoggedIn && (
               <button
                 onClick={() => setShowRestartModal(true)}
-                className="p-1 sm:p-2 bg-red-600 hover:bg-red-700 active:bg-red-800 text-white rounded-md transition-all duration-200 touch-manipulation min-h-[26px] min-w-[26px] sm:min-h-[44px] sm:min-w-[44px] flex items-center justify-center"
-                title="Restart System"
-              >
-                <svg className="w-2.5 h-2.5 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                className='p-1 sm:p-2 bg-red-600 hover:bg-red-700 active:bg-red-800 text-white rounded-md transition-all duration-200 touch-manipulation min-h-[26px] min-w-[26px] sm:min-h-[44px] sm:min-w-[44px] flex items-center justify-center'
+                title='Restart System'>
+                <svg
+                  className='w-2.5 h-2.5 sm:w-5 sm:h-5'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'>
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15'
+                  />
                 </svg>
               </button>
             )}
-            
+
             <button
               onClick={toggleDarkMode}
-              className="p-1 sm:p-2 bg-gray-600 hover:bg-gray-700 active:bg-gray-800 text-white rounded-md transition-all duration-200 touch-manipulation min-h-[26px] min-w-[26px] sm:min-h-[44px] sm:min-w-[44px] flex items-center justify-center"
-              title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
-            >
+              className='p-1 sm:p-2 bg-gray-600 hover:bg-gray-700 active:bg-gray-800 text-white rounded-md transition-all duration-200 touch-manipulation min-h-[26px] min-w-[26px] sm:min-h-[44px] sm:min-w-[44px] flex items-center justify-center'
+              title={
+                isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'
+              }>
               {isDarkMode ? (
-                <svg className="w-2.5 h-2.5 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                <svg
+                  className='w-2.5 h-2.5 sm:w-5 sm:h-5'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'>
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z'
+                  />
                 </svg>
               ) : (
-                <svg className="w-2.5 h-2.5 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                <svg
+                  className='w-2.5 h-2.5 sm:w-5 sm:h-5'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'>
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z'
+                  />
                 </svg>
               )}
             </button>
