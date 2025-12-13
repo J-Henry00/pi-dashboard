@@ -92,9 +92,7 @@ const NetworkGraphsPanel = ({ networkData, loading, isDarkMode = true }) => {
             onClick={() => setActiveGraph(graphType.key)}
             className={`flex-1 flex items-center justify-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
               activeGraph === graphType.key
-                ? isDarkMode
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-blue-500 text-white'
+                ? 'bg-[#ff5100] text-white'
                 : isDarkMode
                   ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'

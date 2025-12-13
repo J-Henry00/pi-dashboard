@@ -84,15 +84,18 @@ const ServersPanel = ({ servers, loading, isDarkMode = true, isLoggedIn = false 
           width: 8px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #fff; /* White handle */
+          background: var(--text-muted);
           border-radius: 6px;
         }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: var(--accent);
+        }
         .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent; /* Invisible background */
+          background: transparent;
         }
         .custom-scrollbar {
           scrollbar-width: thin;
-          scrollbar-color: #fff transparent;
+          scrollbar-color: var(--text-muted) transparent;
         }
       `}</style>
     </Card>

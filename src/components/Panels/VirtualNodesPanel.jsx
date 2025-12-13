@@ -20,8 +20,8 @@ const VirtualNodesPanel = ({ servers, isDarkMode = true, isLoggedIn = false, onK
   );
 
   // Separate servers with port 6000 from others
-  const port6000Servers = virtualServers.filter(server => server.port === 6000);
-  const otherVirtualServers = virtualServers.filter(server => server.port !== 6000);
+  const port6000Servers = virtualServers.filter(server => server.hostname.includes('virtual.hjindra.'));
+  const otherVirtualServers = virtualServers.filter(server => !server.hostname.includes('virtual.hjindra.'));
   
   // Define the loading spinner styles
   const loadingStyles = `
@@ -125,15 +125,18 @@ const VirtualNodesPanel = ({ servers, isDarkMode = true, isLoggedIn = false, onK
           width: 8px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #fff; /* White handle */
+          background: var(--text-muted);
           border-radius: 6px;
         }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: var(--accent);
+        }
         .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent; /* Invisible background */
+          background: transparent;
         }
         .custom-scrollbar {
           scrollbar-width: thin;
-          scrollbar-color: #fff transparent;
+          scrollbar-color: var(--text-muted) transparent;
         }
       `}</style>
       

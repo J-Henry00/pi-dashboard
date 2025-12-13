@@ -148,9 +148,10 @@ const PiLogsPanel = ({ logsData, loading, isDarkMode = true, isLoggedIn = false 
           }}
         >
           <div 
-            className={`relative max-w-4xl max-h-[80vh] mx-4 rounded-lg shadow-xl ${
-              isDarkMode ? 'bg-[#2d3748]' : 'bg-white'
+            className={`relative max-w-4xl max-h-[80vh] mx-4 rounded-lg shadow-xl border ${
+              isDarkMode ? '' : 'bg-white'
             }`}
+            style={isDarkMode ? { backgroundColor: 'var(--card-bg)', borderColor: '#333' } : {}}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
@@ -158,15 +159,17 @@ const PiLogsPanel = ({ logsData, loading, isDarkMode = true, isLoggedIn = false 
               isDarkMode ? 'border-gray-600' : 'border-gray-300'
             }`}>
               <h3 className={`text-lg font-semibold ${
-                isDarkMode ? 'text-white' : 'text-gray-900'
-              }`}>
+                isDarkMode ? '' : 'text-gray-900'
+              }`}
+              style={isDarkMode ? { color: 'var(--text-main)' } : {}}>
                 Log Detail
               </h3>
               <button
                 onClick={() => setShowLogModal(false)}
                 className={`text-2xl font-bold hover:opacity-70 transition-opacity ${
-                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                  isDarkMode ? '' : 'text-gray-600'
                 }`}
+                style={isDarkMode ? { color: 'var(--text-muted)' } : {}}
               >
                 ×
               </button>

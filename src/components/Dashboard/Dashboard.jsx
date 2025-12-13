@@ -10,6 +10,7 @@ import DockerPanel from '../Panels/DockerPanel';
 import NetworkGraphsPanel from '../Panels/NetworkGraphsPanel';
 import LoginModal from '../UI/LoginModal';
 import ConfirmModal from '../UI/ConfirmModal';
+import Footer from '../UI/Footer';
 
 import getStats from '../../utils/getStats';
 import getPublicServers from '../../utils/getPublicServers';
@@ -42,10 +43,11 @@ const CustomModal = ({ isOpen, onClose, text, protocol }) => {
       }}>
       {/* Modal content */}
       <div
-        className='relative bg-[#2d3748] rounded-lg p-6 max-w-md mx-4 shadow-xl'
+        className='relative rounded-lg p-6 max-w-md mx-4 shadow-xl border'
+        style={{ backgroundColor: 'var(--card-bg)', borderColor: '#333' }}
         onClick={(e) => e.stopPropagation()} // Prevent modal content clicks from closing modal
       >
-        <div className='text-white text-center mb-6'>
+        <div className='text-center mb-6' style={{ color: 'var(--text-main)' }}>
           <p className='text-lg'>
             {protocol.toUpperCase() !== 'NOTACONNECT' && (
               <>
@@ -60,7 +62,20 @@ const CustomModal = ({ isOpen, onClose, text, protocol }) => {
         <div className='flex justify-center'>
           <button
             onClick={onClose}
-            className='bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded transition-colors duration-200'>
+            className='text-white font-bold py-2 px-6 rounded transition-all duration-200'
+            style={{ 
+              backgroundColor: 'var(--accent)',
+              border: '1px solid var(--accent)',
+              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.opacity = '0.8';
+              e.target.style.transform = 'scale(1.02)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.opacity = '1';
+              e.target.style.transform = 'scale(1)';
+            }}>
             OK
           </button>
         </div>
@@ -196,15 +211,11 @@ const Dashboard = () => {
     const actions = {
       'web-ssh': {
         action: 'new_page',
-        target: 'https://ssh-pi.hjindra.org/',
+        target: 'https://ssh-pi.hjindra.eu/',
       },
       ssh: {
         action: 'display-modal',
-        target: 'pi@hjindra.org',
-      },
-      vnc: {
-        action: 'display-modal',
-        target: 'vnc.hjindra.org',
+        target: 'pi@ssh-pi.hjindra.eu',
       },
       'pi-connect': {
         action: 'new_page',
@@ -216,7 +227,7 @@ const Dashboard = () => {
       },
       'cloud-storage': {
         action: 'new_page',
-        target: 'https://disk.hjindra.org/',
+        target: 'https://disk.hjindra.eu/',
       },
     };
 
@@ -439,9 +450,12 @@ const Dashboard = () => {
   return (
     <div
       className={`p-8 min-h-screen transition-colors duration-300 ${
-        isDarkMode ? 'bg-[#1f2328] text-white' : 'bg-gray-100 text-gray-900'
-      }`}>
-      <h1 className='text-4xl font-bold text-center mb-8'>Raspberry PI</h1>
+        isDarkMode ? 'text-white' : 'bg-gray-100 text-gray-900'
+      }`}
+      style={isDarkMode ? { backgroundColor: 'var(--bg-color)', color: 'var(--text-main)' } : {}}>
+      <h1 className='text-4xl font-bold mb-8 ml-60'>
+        rpi.hjindra<span style={isDarkMode ? { color: 'var(--accent)' } : {}}>.eu</span>
+      </h1>
       <div className='space-y-8 max-w-[95rem] mx-auto'>
         <div className='grid grid-cols-1 md:grid-cols-4 gap-8'>
           <PiStatsPanel
@@ -533,13 +547,14 @@ const Dashboard = () => {
         <div
           className={`rounded-lg shadow-lg border transition-colors duration-300 p-2 sm:p-3 ${
             isDarkMode
-              ? 'bg-[#2d3748] border-gray-600'
+              ? 'border-gray-600'
               : 'bg-white border-gray-300'
-          }`}>
+          }`}
+          style={isDarkMode ? { backgroundColor: 'var(--card-bg)', borderColor: '#333' } : {}}>
           <div className='flex flex-col space-y-1 sm:flex-row sm:space-y-0 sm:space-x-2'>
             <button
               onClick={handleRefresh}
-              className='p-1 sm:p-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-md transition-all duration-200 touch-manipulation min-h-[26px] min-w-[26px] sm:min-h-[44px] sm:min-w-[44px] flex items-center justify-center'
+              className='p-1 sm:p-2 bg-[#ff5100] hover:bg-[#a83500] active:bg-blue-800 text-white rounded-md transition-all duration-200 touch-manipulation min-h-[26px] min-w-[26px] sm:min-h-[44px] sm:min-w-[44px] flex items-center justify-center'
               title='Refresh servers'>
               <svg
                 className='w-2.5 h-2.5 sm:w-5 sm:h-5'
@@ -649,6 +664,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      <Footer isDarkMode={isDarkMode} />
     </div>
   );
 };

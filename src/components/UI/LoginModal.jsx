@@ -31,14 +31,15 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
       }}
     >
       <div 
-        className="relative bg-[#2d3748] rounded-lg p-6 max-w-md mx-4 shadow-xl"
+        className="relative rounded-lg p-6 max-w-md mx-4 shadow-xl border"
+        style={{ backgroundColor: 'var(--card-bg)', borderColor: '#333' }}
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-2xl font-bold text-white text-center mb-6">Admin Login</h2>
+        <h2 className="text-2xl font-bold text-center mb-6" style={{ color: 'var(--text-main)' }}>Admin Login</h2>
         
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-white text-sm font-medium mb-2">
+            <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-main)' }}>
               Username
             </label>
             <input
@@ -46,13 +47,24 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
               name="username"
               value={credentials.username}
               onChange={handleChange}
-              className="w-full px-3 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 text-white rounded-md focus:outline-none focus:ring-2 transition-colors duration-200"
+              style={{ 
+                backgroundColor: '#2b2b2b', 
+                border: '1px solid #444',
+                color: 'var(--text-main)'
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = 'var(--accent)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = '#444';
+              }}
               required
             />
           </div>
           
           <div>
-            <label className="block text-white text-sm font-medium mb-2">
+            <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-main)' }}>
               Password
             </label>
             <input
@@ -60,7 +72,18 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
               name="password"
               value={credentials.password}
               onChange={handleChange}
-              className="w-full px-3 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 text-white rounded-md focus:outline-none focus:ring-2 transition-colors duration-200"
+              style={{ 
+                backgroundColor: '#2b2b2b', 
+                border: '1px solid #444',
+                color: 'var(--text-main)'
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = 'var(--accent)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = '#444';
+              }}
               required
             />
           </div>
@@ -75,13 +98,36 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-md transition-colors duration-200"
+              className="flex-1 px-4 py-2 text-white rounded-md transition-all duration-200 font-bold"
+              style={{ 
+                backgroundColor: '#2b2b2b',
+                border: '1px solid #444'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.opacity = '0.8';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.opacity = '1';
+              }}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors duration-200"
+              className="flex-1 px-4 py-2 text-white rounded-md transition-all duration-200 font-bold"
+              style={{ 
+                backgroundColor: 'var(--accent)',
+                border: '1px solid var(--accent)',
+                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.opacity = '0.8';
+                e.target.style.transform = 'scale(1.02)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.opacity = '1';
+                e.target.style.transform = 'scale(1)';
+              }}
             >
               Login
             </button>
